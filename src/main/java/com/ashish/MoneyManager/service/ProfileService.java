@@ -1,12 +1,18 @@
 package com.ashish.MoneyManager.service;
 
+import com.ashish.MoneyManager.dto.AuthDto;
 import com.ashish.MoneyManager.dto.ProfileDto;
 import com.ashish.MoneyManager.entity.ProfileEntity;
 import com.ashish.MoneyManager.repository.ProfileRepository;
+import com.ashish.MoneyManager.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -15,6 +21,10 @@ public class ProfileService {
     private final ProfileRepository profileRepository;
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
+    private final AppUserDetailsService userDetailsService;
+
+    private final AuthenticationManager authenticationManager;
 
     public ProfileDto registerProfile(ProfileDto profileDto) {
 
@@ -65,6 +75,24 @@ public class ProfileService {
                 })
                 .orElse(false);
 
+    }
+
+
+    public Map<String,Object> authenticateAndGenerateToken(AuthDto authDto) {
+        try{
+              authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authDto.getEmail(), authDto.getPassword()));
+
+              // generate jwt token
+            String token = jwtUtil.generateToken(authDto.getEmail());
+            return Map.of(
+                    "token","token",
+                    "user", userDetailsService.getPublicProfile(authDto.getEmail()
+            ));
+
+        } catch (Exception e){
+            throw new BadCredentialsException("Invalid username or password");
+
+        }
     }
 
 }

@@ -15,6 +15,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ProfileController {
     private final ProfileService profileService;
+    private final AppUserDetailsService appUserDetailsService;
 
 
     @PostMapping("/register")
@@ -37,7 +38,7 @@ public class ProfileController {
     @PostMapping("/login")
     public ResponseEntity<Map<String ,Object>> login( @RequestBody AuthDto authDto) {
       try{
-          if(!profileService.isAccountActive(authDto.getEmail())){
+          if(!appUserDetailsService.isAccountActive(authDto.getEmail())){
               return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message", "Account is not active. Please activate your account first"));
           }
         Map<String,Object> response=  profileService.authenticateAndGenerateToken(authDto);
