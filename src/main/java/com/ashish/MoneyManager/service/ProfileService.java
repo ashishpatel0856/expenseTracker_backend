@@ -4,6 +4,7 @@ import com.ashish.MoneyManager.dto.ProfileDto;
 import com.ashish.MoneyManager.entity.ProfileEntity;
 import com.ashish.MoneyManager.repository.ProfileRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -13,11 +14,14 @@ import java.util.UUID;
 public class ProfileService {
     private final ProfileRepository profileRepository;
     private final EmailService emailService;
+    private final PasswordEncoder passwordEncoder;
 
     public ProfileDto registerProfile(ProfileDto profileDto) {
 
         ProfileEntity newProfile = toEntity(profileDto);
         newProfile.setActivationToken(UUID.randomUUID().toString());
+
+//        newProfile.setPassword(passwordEncoder.encode(newProfile.getPassword())); // hide password
         newProfile = profileRepository.save(newProfile);
 
         // send activation email
@@ -34,7 +38,7 @@ public class ProfileService {
                 .id(profileDto.getId())
                 .fullName(profileDto.getFullName())
                 .email(profileDto.getEmail())
-                .Password(profileDto.getPassword())
+                .Password(passwordEncoder.encode(profileDto.getPassword()))
                 .profileImageUrl(profileDto.getProfileImageUrl())
                 .createdAt(profileDto.getCreatedAt())
                 .updatedAt(profileDto.getUpdatedAt())

@@ -1,11 +1,14 @@
 package com.ashish.MoneyManager.controller;
 
+import com.ashish.MoneyManager.dto.AuthDto;
 import com.ashish.MoneyManager.dto.ProfileDto;
 import com.ashish.MoneyManager.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,4 +32,7 @@ public class ProfileController {
 
     }
 
+    public ResponseEntity<Map<String ,Object>> login(@RequestParam String username, @RequestParam AuthDto authDto) {
+
+    }
 }
