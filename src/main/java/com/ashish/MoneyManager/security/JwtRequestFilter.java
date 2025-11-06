@@ -28,8 +28,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
       String email = null;
       String jwt=null;
       if(authHeader != null && authHeader.startsWith("Bearer ")) {
-          final String token = authHeader.substring(7);
-           email=jwtUtil.extractUsername(jwt);
+          jwt = authHeader.substring(7).trim();  // remove spaces
+          try {
+              email = jwtUtil.extractUsername(jwt);
+          } catch (Exception e) {
+              System.out.println("Invalid JWT Token: " + e.getMessage());
+          }
       }
 
 

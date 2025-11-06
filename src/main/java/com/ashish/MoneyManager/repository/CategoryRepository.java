@@ -2,10 +2,10 @@ package com.ashish.MoneyManager.repository;
 
 import com.ashish.MoneyManager.entity.CategoryEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.util.List;
 import java.util.Optional;
-
 public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> {
 
 //    select *from categories where profile_id =?1
@@ -18,6 +18,6 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> 
    List<CategoryEntity>  findByTypeAndProfileId(String type ,Long profileId);
 
 
-   Boolean existByNameAndProfileId(String name ,Long profileId);
+   Boolean existsByNameAndProfileId(String name ,Long profileId);
 
 }

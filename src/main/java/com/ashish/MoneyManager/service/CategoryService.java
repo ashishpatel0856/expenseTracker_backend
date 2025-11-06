@@ -13,11 +13,11 @@ import org.springframework.web.server.ResponseStatusException;
 @RequiredArgsConstructor
 public class CategoryService {
     private final CategoryRepository categoryRepository;
-    private final ProfileService profileService;
+    private final AppUserDetailsService userDetailsService;
 
     public CategoryDto saveCategory(CategoryDto categoryDto) {
-        ProfileEntity profile = profileService.getCurrentProfile;
-        if(categoryRepository.existByNameAndProfileId(categoryDto.getName(),profile.getId())){
+        ProfileEntity profile = userDetailsService.getCurrentProfile();
+        if(categoryRepository.existsByNameAndProfileId(categoryDto.getName(),profile.getId())){
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Category with this name already exists");
         }
         CategoryEntity newCategory =toEntity(categoryDto,profile);
