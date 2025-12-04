@@ -31,13 +31,31 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
    httpSecurity.cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth ->auth.requestMatchers("/status","/health","/request","/login","/register","/activate",
-                                "/v3/api-docs/**",
-                                "/swagger-ui/**",
-                                "/swagger-ui.html").permitAll()
-                        .anyRequest().authenticated())
+           .authorizeHttpRequests(auth -> auth
+                   .requestMatchers(
+                           "/status",
+                           "/health",
+                           "/request",
+                           "/login",
+                           "/register",
+                           "/activate",
 
-        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                           // swagger without context-path (optional)
+                           "/swagger-ui/**",
+                           "/swagger-ui.html",
+                           "/v3/api-docs/**",
+
+                           // swagger with context-path (required)
+                           "/api/v1.0/swagger-ui/**",
+                           "/api/v1.0/swagger-ui.html",
+                           "/api/v1.0/swagger-ui/index.html",
+                           "/api/v1.0/v3/api-docs/**"
+                   ).permitAll()
+                   .anyRequest().authenticated()
+           )
+
+
+           .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
         .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 

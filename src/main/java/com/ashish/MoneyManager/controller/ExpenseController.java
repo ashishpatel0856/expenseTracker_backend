@@ -2,7 +2,6 @@ package com.ashish.MoneyManager.controller;
 
 
 import com.ashish.MoneyManager.dto.ExpenseDto;
-import com.ashish.MoneyManager.dto.IncomeDto;
 import com.ashish.MoneyManager.service.ExpenseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
