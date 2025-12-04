@@ -14,7 +14,7 @@ public class ContactController {
 
     private final EmailService emailService;
 
-    @Value("${app.admin.email}")
+    @Value("${CONTACT_EMAIL}")
     private String adminEmail;
 
     @PostMapping
