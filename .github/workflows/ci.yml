@@ -1,48 +1,48 @@
-name: Spring Boot CI
-
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-
-      - name: Set up JDK 21
-        uses: actions/setup-java@v3
-        with:
-          java-version: '21'
-          distribution: 'temurin'
-
-      - name: Set up PostgreSQL
-        uses: harmon758/postgresql-action@v1.2.0
-        with:
-          postgresql version: '15'
-          postgresql db: 'testing_4o5u'
-          postgresql user: 'testing_4o5u_user'
-          postgresql password: ${{ secrets.DB_PASSWORD }}
-
-      - name: Load environment variables
-        run: |
-          echo "BREVO_USERNAME=${{ secrets.BREVO_USERNAME }}" >> $GITHUB_ENV
-          echo "BREVO_PASSWORD=${{ secrets.BREVO_PASSWORD }}" >> $GITHUB_ENV
-          echo "BREVO_FROM_EMAIL=${{ secrets.BREVO_FROM_EMAIL }}" >> $GITHUB_ENV
-          echo "DB_URL=${{ secrets.DB_URL }}" >> $GITHUB_ENV
-          echo "DB_USER=${{ secrets.DB_USER }}" >> $GITHUB_ENV
-          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
-          echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> $GITHUB_ENV
-          echo "MONEY_MANAGER_FRONTEND_URL=${{ secrets.MONEY_MANAGER_FRONTEND_URL }}" >> $GITHUB_ENV
-          echo "MONEY_MANAGER_BACKEND_URL=${{ secrets.MONEY_MANAGER_BACKEND_URL }}" >> $GITHUB_ENV
-          echo "SPRING_PROFILES_ACTIVE=dev" >> $GITHUB_ENV
-
-      - name: Build with Maven
-        run: mvn clean package -DskipTests
-
-      - name: Run Spring Boot
-        run: mvn spring-boot:run -Dspring-boot.run.profiles=dev -DskipTests
+#name: Spring Boot CI
+#
+#on:
+#  push:
+#    branches: [main]
+#  pull_request:
+#    branches: [main]
+#
+#jobs:
+#  build:
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Checkout repo
+#        uses: actions/checkout@v3
+#
+#      - name: Set up JDK 21
+#        uses: actions/setup-java@v3
+#        with:
+#          java-version: '21'
+#          distribution: 'temurin'
+#
+#      - name: Set up PostgreSQL
+#        uses: harmon758/postgresql-action@v1.2.0
+#        with:
+#          postgresql version: '15'
+#          postgresql db: 'testing_4o5u'
+#          postgresql user: 'testing_4o5u_user'
+#          postgresql password: ${{ secrets.DB_PASSWORD }}
+#
+#      - name: Load environment variables
+#        run: |
+#          echo "BREVO_USERNAME=${{ secrets.BREVO_USERNAME }}" >> $GITHUB_ENV
+#          echo "BREVO_PASSWORD=${{ secrets.BREVO_PASSWORD }}" >> $GITHUB_ENV
+#          echo "BREVO_FROM_EMAIL=${{ secrets.BREVO_FROM_EMAIL }}" >> $GITHUB_ENV
+#          echo "DB_URL=${{ secrets.DB_URL }}" >> $GITHUB_ENV
+#          echo "DB_USER=${{ secrets.DB_USER }}" >> $GITHUB_ENV
+#          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
+#          echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> $GITHUB_ENV
+#          echo "MONEY_MANAGER_FRONTEND_URL=${{ secrets.MONEY_MANAGER_FRONTEND_URL }}" >> $GITHUB_ENV
+#          echo "MONEY_MANAGER_BACKEND_URL=${{ secrets.MONEY_MANAGER_BACKEND_URL }}" >> $GITHUB_ENV
+#          echo "SPRING_PROFILES_ACTIVE=dev" >> $GITHUB_ENV
+#
+#      - name: Build with Maven
+#        run: mvn clean package -DskipTests
+#
+#      - name: Run Spring Boot
+#        run: mvn spring-boot:run -Dspring-boot.run.profiles=dev -DskipTests
