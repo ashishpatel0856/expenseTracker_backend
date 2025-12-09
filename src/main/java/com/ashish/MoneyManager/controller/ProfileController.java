@@ -41,6 +41,7 @@ public class ProfileController {
           if(!appUserDetailsService.isAccountActive(authDto.getEmail())){
               return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message", "Account is not active. Please activate your account first"));
           }
+//          authDto.setFullName(authDto.getFullName());
         Map<String,Object> response=  profileService.authenticateAndGenerateToken(authDto);
           return ResponseEntity.status(HttpStatus.OK).body(response);
       }catch (Exception e){
