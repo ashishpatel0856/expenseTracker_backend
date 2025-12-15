@@ -40,12 +40,12 @@ public class SecurityConfig {
                            "/register",
                            "/activate",
 
-                           // swagger without context-path (optional)
+                           // swagger without context-path
                            "/swagger-ui/**",
                            "/swagger-ui.html",
                            "/v3/api-docs/**",
 
-                           // swagger with context-path (required)
+                           // swagger with context-path
                            "/api/v1.0/swagger-ui/**",
                            "/api/v1.0/swagger-ui.html",
                            "/api/v1.0/swagger-ui/index.html",
