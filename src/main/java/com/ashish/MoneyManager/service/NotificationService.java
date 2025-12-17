@@ -18,7 +18,7 @@ import java.util.List;
 public class NotificationService {
 
     private final ProfileRepository profileRepository;
-    private final EmailService emailService;
+    private final MailService emailService;
     private final ExpenseService expenseService;
 
     @Value("${money.manager.fronted.url}")

@@ -20,7 +20,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ProfileService {
     private final ProfileRepository profileRepository;
-    private final EmailService emailService;
+    private final MailService mailService;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final AppUserDetailsService userDetailsService;
@@ -41,7 +41,7 @@ public class ProfileService {
         String subject ="Activate your Money Manager account";
         String body = "Click on the following link to activate your Money Manager account:"+activationLink;
 
-        emailService.sendEmail(newProfile.getEmail(), subject, body);
+        mailService.sendEmail(newProfile.getEmail(), subject, body);
         return toDto(newProfile);
 
     }
