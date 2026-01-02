@@ -83,7 +83,7 @@ This backend provides core functionalities including user authentication, income
 
 🌐 Base API URL : - **https://money-manager-backend-7xc8.onrender.com/api/v1.0**
 
-📘 Swagger UI: - **https://money-manager-backend-7xc8.onrender.com/api/v1.0/v3/swagger-ui.html**
+📘 Swagger UI: - **https://money-manager-backend-7xc8.onrender.com/api/v1.0/swagger-ui.html**
 
 🩺 Health Check Endpoints
 - **/health, /status**
@@ -93,3 +93,4 @@ This backend provides core functionalities including user authentication, income
 - **Backend Developer | Java | Spring Boot**
 - **📧 Email: ashishkumarr0856@gmail.com**
 - **🔗 LinkedIn: https://www.linkedin.com/in/ashish-patel-28a572304**
+
