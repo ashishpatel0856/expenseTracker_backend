@@ -1,6 +1,7 @@
 package com.ashish.MoneyManager.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.mail.SimpleMailMessage;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class SmtpMailService implements MailService {
 
-    private  JavaMailSender mailSender;
+    private final JavaMailSender mailSender;
 
     @Value("${spring.mail.properties.mail.smtp.from}")
     private String fromEmail;
@@ -27,4 +28,3 @@ public class SmtpMailService implements MailService {
         mailSender.send(message);
     }
 }
-

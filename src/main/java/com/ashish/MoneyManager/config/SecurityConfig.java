@@ -40,7 +40,6 @@ public class SecurityConfig {
                            "/register",
                            "/activate",
 
-                           // swagger without context-path
                            "/swagger-ui/**",
                            "/swagger-ui.html",
                            "/v3/api-docs/**",
@@ -77,10 +76,15 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(List.of("*"));
+
+        configuration.setAllowedOrigins(List.of(
+                "https://expense-tracker-web-application.vercel.app"
+        ));
+
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(List.of("Authorization","Content-Type","Accept"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept"));
         configuration.setAllowCredentials(true);
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
