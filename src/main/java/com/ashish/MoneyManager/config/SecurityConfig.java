@@ -1,10 +1,10 @@
 package com.ashish.MoneyManager.config;
 
 import com.ashish.MoneyManager.security.JwtRequestFilter;
-import com.ashish.MoneyManager.service.AppUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -25,47 +25,50 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final AppUserDetailsService userDetailsService;
     private final JwtRequestFilter jwtRequestFilter;
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-   httpSecurity.cors(Customizer.withDefaults())
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+        http
+                .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
-           .authorizeHttpRequests(auth -> auth
-                   .requestMatchers(
-                           "/status",
-                           "/health",
-                           "/request",
-                           "/login",
-                           "/register",
-                           "/activate",
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        /* Public endpoints */
+                        .requestMatchers(
+                                "/login",
+                                "/register",
+                                "/activate",
+                                "/status",
+                                "/health",
 
-                           "/swagger-ui/**",
-                           "/swagger-ui.html",
-                           "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/v3/api-docs/**",
 
-                           // swagger with context-path
-                           "/api/v1.0/swagger-ui/**",
-                           "/api/v1.0/swagger-ui.html",
-                           "/api/v1.0/swagger-ui/index.html",
-                           "/api/v1.0/v3/api-docs/**"
-                   ).permitAll()
-                   .anyRequest().authenticated()
-           )
+                                "/api/v1.0/login",
+                                "/api/v1.0/register",
+                                "/api/v1.0/activate",
+                                "/api/v1.0/status",
+                                "/api/v1.0/health",
+                                "/api/v1.0/swagger-ui/**",
+                                "/api/v1.0/v3/api-docs/**"
+                        ).permitAll()
+                        .anyRequest().authenticated()
+                )
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
-
-           .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
-        .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-
-        return httpSecurity.build();
-
+        return http.build();
     }
 
-
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration configuration
+    ) throws Exception {
+        return configuration.getAuthenticationManager();
     }
 
     @Bean
@@ -75,19 +78,26 @@ public class SecurityConfig {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(List.of(
-                "https://expense-tracker-web-application.vercel.app"
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(List.of(
+                "https://expense-tracker-web-application.vercel.app",
+                "https://expense-tracker-web-application-p0nimqvz8.vercel.app"
         ));
+        config.setAllowedMethods(List.of(
+                "GET", "POST", "PUT", "DELETE", "OPTIONS"
+        ));
+        config.setAllowedHeaders(List.of(
+                "Authorization",
+                "Content-Type",
+                "Accept"
+        ));
+        config.setAllowCredentials(true);
 
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept"));
-        configuration.setAllowCredentials(true);
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-
 }
