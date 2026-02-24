@@ -80,18 +80,20 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
 
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of(
-                "https://expense-tracker-web-application.vercel.app",
-                "https://expense-tracker-web-application-p0nimqvz8.vercel.app"
+        config.setAllowedOriginPatterns(List.of(
+                "https://*.vercel.app"
         ));
+
         config.setAllowedMethods(List.of(
                 "GET", "POST", "PUT", "DELETE", "OPTIONS"
         ));
+
         config.setAllowedHeaders(List.of(
                 "Authorization",
                 "Content-Type",
                 "Accept"
         ));
+
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source =
