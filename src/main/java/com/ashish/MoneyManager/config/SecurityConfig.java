@@ -26,33 +26,37 @@ import java.util.List;
 public class SecurityConfig {
 
     private final JwtRequestFilter jwtRequestFilter;
+
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http)
+            throws Exception {
 
         http
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
+
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
+
                 .authorizeHttpRequests(auth -> auth
+
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                        /* PUBLIC AUTH APIs */
                         .requestMatchers(
                                 "/login",
                                 "/register",
                                 "/activate",
+                                "/health",
+                                "/status",
 
                                 "/api/v1.0/login",
                                 "/api/v1.0/register",
                                 "/api/v1.0/activate",
-
-                                "/status",
-                                "/health",
-                                "/api/v1.0/status",
                                 "/api/v1.0/health",
+                                "/api/v1.0/status",
 
+                                // swagger
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
                                 "/api/v1.0/swagger-ui/**",
@@ -60,9 +64,12 @@ public class SecurityConfig {
                         ).permitAll()
 
                         .anyRequest().authenticated()
-
                 )
-                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+
+                .addFilterBefore(
+                        jwtRequestFilter,
+                        UsernamePasswordAuthenticationFilter.class
+                );
 
         return http.build();
     }
@@ -83,8 +90,10 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
 
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOriginPatterns(List.of(
-                "https://*.vercel.app"
+
+        config.setAllowedOrigins(List.of(
+                "https://expense-tracker-web-application.vercel.app",
+                "https://expense-tracker-web-application-mkc291c7r.vercel.app"
         ));
 
         config.setAllowedMethods(List.of(
@@ -97,12 +106,12 @@ public class SecurityConfig {
                 "Accept"
         ));
 
-        config.setAllowCredentials(true);
+        config.setAllowCredentials(false);
 
         UrlBasedCorsConfigurationSource source =
                 new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
 
+        source.registerCorsConfiguration("/**", config);
         return source;
     }
 }
