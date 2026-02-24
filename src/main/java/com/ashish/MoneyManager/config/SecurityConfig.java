@@ -37,27 +37,30 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        /* Public endpoints */
+
+                        /* PUBLIC AUTH APIs */
                         .requestMatchers(
                                 "/login",
                                 "/register",
                                 "/activate",
-                                "/status",
-                                "/health",
-
-                                "/swagger-ui/**",
-                                "/swagger-ui.html",
-                                "/v3/api-docs/**",
 
                                 "/api/v1.0/login",
                                 "/api/v1.0/register",
                                 "/api/v1.0/activate",
+
+                                "/status",
+                                "/health",
                                 "/api/v1.0/status",
                                 "/api/v1.0/health",
+
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
                                 "/api/v1.0/swagger-ui/**",
                                 "/api/v1.0/v3/api-docs/**"
                         ).permitAll()
+
                         .anyRequest().authenticated()
+
                 )
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
